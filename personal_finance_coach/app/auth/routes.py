@@ -33,8 +33,7 @@ def callback():
         logger.debug(f"User authenticated: {session['profile'].get('email')}")
         
         # Use base URL from config
-        base_url = app.config['BASE_URL']
-        return redirect(f"{base_url}/auth/dashboard")
+        return redirect(url_for('auth.dashboard'))
     except Exception as e:
         logger.error(f"Callback error: {str(e)}")
         return redirect(url_for('auth.login'))
