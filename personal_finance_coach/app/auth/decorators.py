@@ -1,10 +1,10 @@
 from functools import wraps
-from flask import redirect, url_for, session
+from flask import session, redirect, url_for
 
-def login_required(f):
+def requires_auth(f):
     @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user' not in session:
+    def decorated(*args, **kwargs):
+        if 'profile' not in session:
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
-    return decorated_function
+    return decorated
