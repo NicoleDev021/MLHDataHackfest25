@@ -39,4 +39,4 @@ def logout():
         'returnTo': url_for('auth.login', _external=True),
         'client_id': app.config['AUTH0_CLIENT_ID']
     }
-    return redirect(oauth.auth0.api_base_url + '/v2/logout?' + urlencode(params))
+    return redirect(f"https://{app.config['AUTH0_DOMAIN']}/v2/logout?" + urlencode(params))
