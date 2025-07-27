@@ -1,4 +1,3 @@
-spaces/MLHDataHackfest25/personal_finance_coach/app/auth/routes.py
 from flask import current_app as app
 from flask import redirect, render_template, session, url_for
 from app.auth import bp
