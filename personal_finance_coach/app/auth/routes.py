@@ -1,7 +1,7 @@
 from flask import current_app as app
 from flask import redirect, render_template, session, url_for
 from app.auth import bp
-from app.auth.decorators import requires_auth
+from app.auth.decorators import login_required
 from urllib.parse import urlencode
 
 @bp.route('/login')
