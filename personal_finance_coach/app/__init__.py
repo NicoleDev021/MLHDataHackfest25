@@ -39,51 +39,7 @@ def create_app(config_class=Config):
         },
     )
 
-    # Update routes to use the correct base URL
-    @app.route("/")
-    def home():
-        base_url = get_base_url()
-        if not session.get("user"):
-            return redirect(f"{base_url}/login")
-        return render_template(
-            "home.html",
-            session=session.get("user"),
-            pretty=json.dumps(session.get("user"), indent=4),
-        )
-
-    @app.route("/callback", methods=["GET", "POST"])
-    def callback():
-        try:
-            token = oauth.auth0.authorize_access_token()
-            session["user"] = token
-            base_url = get_base_url()
-            return redirect(f"{base_url}/")
-        except Exception as e:
-            app.logger.error(f"Callback error: {str(e)}")
-            base_url = get_base_url()
-            return redirect(f"{base_url}/login")
-
-    @app.route("/login")
-    def login():
-        base_url = get_base_url()
-        callback_url = f"{base_url}/callback"
-        return oauth.auth0.authorize_redirect(redirect_uri=callback_url)
-
-    @app.route("/logout")
-    def logout():
-        session.clear()
-        base_url = get_base_url()
-        return redirect(
-            "https://"
-            + app.config["AUTH0_DOMAIN"]
-            + "/v2/logout?"
-            + urlencode(
-                {
-                    "returnTo": base_url,
-                    "client_id": app.config["AUTH0_CLIENT_ID"],
-                },
-                quote_via=quote_plus,
-            )
-        )
-
+    # Register the auth blueprint
+    from app.auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
     return app
