@@ -1,0 +1,50 @@
+# CodeQL Configuration for MLHDataHackfest25
+# This configuration customizes CodeQL analysis for better security coverage
+
+name: "MLHDataHackfest25 CodeQL Config"
+
+# Disable default queries and enable specific query suites
+disable-default-queries: false
+
+# Query suites to run
+queries:
+  - uses: security-and-quality
+  - uses: security-experimental
+
+# Paths to analyze
+paths:
+  - personal_finance_coach/app
+  - personal_finance_coach/run.py
+
+# Paths to ignore during analysis
+paths-ignore:
+  - personal_finance_coach/__pycache__
+  - personal_finance_coach/logs
+  - personal_finance_coach/venv
+  - personal_finance_coach/.venv
+  - "**/*.pyc"
+  - "**/__pycache__/**"
+  - "**/node_modules/**"
+  - "**/.git/**"
+
+# Language-specific configuration
+python:
+  # Include test files in analysis
+  analyze-test-files: true
+  
+  # Python-specific paths to analyze
+  paths:
+    - personal_finance_coach
+  
+  # Python-specific paths to ignore
+  paths-ignore:
+    - personal_finance_coach/tests/fixtures
+    - personal_finance_coach/migrations
+
+# Custom query packs for enhanced security analysis
+packs:
+  - codeql/python-queries
+  - codeql/python-security-queries
+
+# Configuration for external data
+external-repository-token-stdin: false

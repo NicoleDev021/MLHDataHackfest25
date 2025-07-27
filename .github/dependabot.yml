@@ -1,0 +1,65 @@
+# GitHub Dependabot configuration for MLHDataHackfest25
+# This file configures automated dependency updates for security and maintenance
+
+version: 2
+updates:
+  # Python dependencies in personal_finance_coach
+  - package-ecosystem: "pip"
+    directory: "/personal_finance_coach"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "NicoleDev021"
+    assignees:
+      - "NicoleDev021"
+    commit-message:
+      prefix: "security"
+      prefix-development: "deps"
+      include: "scope"
+    # Group minor and patch updates together
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "security-update"
+      minor-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    # Security updates get highest priority
+    priority: 10
+    # Allow both direct and indirect dependency updates
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    # Ignore specific packages if needed (currently none)
+    ignore: []
+    # Auto-merge security patches for known safe updates
+    labels:
+      - "dependencies"
+      - "security"
+
+  # GitHub Actions workflow dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "10:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "NicoleDev021"
+    assignees:
+      - "NicoleDev021"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "github-actions"
+      - "dependencies"

@@ -1,0 +1,122 @@
+# Comprehensive Security Workflow
+# This workflow runs multiple security checks including dependency scanning,
+# secrets detection, and security linting
+
+name: "Security Checks"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Run security checks daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install safety bandit semgrep
+
+    - name: Install project dependencies
+      run: |
+        cd personal_finance_coach
+        pip install -r requirements.txt
+
+    # Check for known security vulnerabilities in dependencies
+    - name: Run Safety check
+      run: |
+        cd personal_finance_coach
+        safety check --json --output safety-report.json || true
+        if [ -f safety-report.json ]; then
+          echo "Safety vulnerabilities found:"
+          cat safety-report.json
+        fi
+
+    # Run Bandit for Python security linting
+    - name: Run Bandit security linter
+      run: |
+        cd personal_finance_coach
+        bandit -r . -f json -o bandit-report.json || true
+        if [ -f bandit-report.json ]; then
+          echo "Bandit security issues found:"
+          cat bandit-report.json
+        fi
+
+    # Run Semgrep for additional security analysis
+    - name: Run Semgrep security analysis
+      run: |
+        cd personal_finance_coach
+        semgrep --config=auto --json --output=semgrep-report.json . || true
+        if [ -f semgrep-report.json ]; then
+          echo "Semgrep security findings:"
+          cat semgrep-report.json
+        fi
+
+    # Upload security reports as artifacts
+    - name: Upload security reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: security-reports
+        path: |
+          personal_finance_coach/safety-report.json
+          personal_finance_coach/bandit-report.json
+          personal_finance_coach/semgrep-report.json
+        retention-days: 30
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for secret scanning
+
+    - name: Run TruffleHog secrets scan
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        base: main
+        head: HEAD
+        extra_args: --debug --only-verified
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Dependency Review
+      uses: actions/dependency-review-action@v4
+      with:
+        # Fail the action if vulnerabilities with severity high or critical are found
+        fail-on-severity: high
+        # Show licenses for dependencies
+        license-check: true
+        # Show vulnerable dependencies
+        vulnerability-check: true
