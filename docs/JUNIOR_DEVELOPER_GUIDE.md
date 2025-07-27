@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright (c) 2025 Madison Nicole Goodwin https://github.com/NicoleDev021
+
+SPDX-License-Identifier: CC-BY-4.0
+-->
+
 """
 Personal Finance Coach - Junior Developer Guide
 =============================================

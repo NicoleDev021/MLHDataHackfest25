@@ -1,13 +1,5 @@
 <!--
-SPDX-FileCopyrightText: Copyright (c) 2025 Madiso## Features
-
-- **Authentication**: Secure login/logout with Auth0 OAuth2
-- **User Dashboard**: Personalized dashboard for authenticated users  
-- **Responsive Design**: Bootstrap-based UI that works on all devices
-- **Error Handling**: Comprehensive error pages and logging
-- **Security**: CSRF protection, secure session cookies, input validation
-- **Multi-Environment**: Support for development, production, and testing configurations
-- **Code Quality**: Perfect 10.00/10 Pylint score, 0 security vulnerabilities, 100% formatting compliancele Goodwin https://github.com/NicoleDev021
+SPDX-FileCopyrightText: Copyright (c) 2025 Madison Nicole Goodwin https://github.com/NicoleDev021
 
 SPDX-License-Identifier: CC-BY-4.0
 -->

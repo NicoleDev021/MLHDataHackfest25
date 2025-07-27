@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Madison Nicole Goodwin https://github.com/NicoleDev021
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 """
 Data validation schemas for the Personal Finance Coach application.
 
