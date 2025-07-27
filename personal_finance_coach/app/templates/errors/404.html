@@ -1,15 +1,57 @@
+<!--
+Personal Finance Coach - 404 Error Page Template
+
+This template displays a user-friendly error page when a requested URL is not found.
+
+Error Context:
+- Triggered when Flask can't match a URL to any registered route
+- HTTP status code 404 (Not Found)
+- Handles both valid routes with invalid parameters and completely invalid URLs
+
+Template Purpose:
+- Provide clear feedback that the page doesn't exist
+- Offer navigation back to working parts of the application
+- Maintain consistent site branding and styling
+
+User Experience:
+- Large, clear "404" display for immediate recognition
+- Friendly explanation of what happened
+- Prominent button to return to home page
+- Professional appearance maintains user confidence
+
+Technical Implementation:
+- Registered in app/__init__.py via @app.errorhandler(404)
+- Automatically rendered by Flask when 404 occurs
+- Inherits navigation and styling from base template
+-->
+
 {% extends "base.html" %}
 
 {% block title %}Page Not Found{% endblock %}
 
 {% block content %}
+    <!-- Centered error message with professional layout -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
+                <!-- Large, prominent error code for immediate recognition -->
                 <h1 class="display-1">404</h1>
+                
+                <!-- Clear error message -->
                 <h2>Page Not Found</h2>
+                
+                <!-- User-friendly explanation -->
                 <p class="lead">The page you're looking for doesn't exist.</p>
+                
+                <!-- Visual separator -->
                 <hr class="my-4">
+                
+                <!-- 
+                Call-to-action to return to working part of site
+                - url_for('home') generates safe URL to home page
+                - Bootstrap btn-primary for prominent styling
+                - Icon (if Font Awesome loaded) for visual appeal
+                -->
                 <a href="{{ url_for('home') }}" class="btn btn-primary">
                     <i class="fas fa-home"></i> Go Home
                 </a>

@@ -1,28 +1,88 @@
-{% extends "base.html" %}                                                                                         
-                                                                                                                      
-    {% block title %}Dashboard{% endblock %}                                                                          
-                                                                                                                      
-    {% block content %}                                                                                               
-    <div class="container mt-4">                                                                                            
-        <div class="row">                                                                                                 
-            <div class="col-md-4">                                                                                        
-                <div class="card">                                                                                        
-                    <div class="card-body">                                                                               
-                        <h5 class="card-title">Profile</h5>                                                               
-                        {% if userinfo.picture %}                                                                                 
-                            <img src="{{ userinfo.picture }}" alt="Profile" class="rounded-circle mb-3"            
-      style="max-width: 100px;">                                                                                                 
-                        {% endif %}                                                                                                 
-                        <p><strong>Name:</strong> {{ userinfo.name }}</p>                                      
-                        <p><strong>Email:</strong> {{ userinfo.email }}</p>                                    
-                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">Logout</a>
-                    </div>                                                                                                
-                </div>                                                                                                    
-            </div>                                                                                                        
-            <div class="col-md-8">                                                                                        
-                <h2>Financial Dashboard</h2>                                                                              
-                <p>Welcome to your personal finance dashboard!</p>                                                                      
-            </div>                                                                                                        
-        </div>                                                                                                            
+<!--
+Personal Finance Coach - User Dashboard Template
+
+This template displays the authenticated user's dashboard with profile information
+and financial management interface.
+
+Template Purpose:
+- Protected route - only accessible after login
+- Shows user profile information from Auth0
+- Main hub for financial management features
+
+Template Variables (passed from routes.py):
+- userinfo: Dictionary containing user profile data
+  - userinfo.name: User's display name
+  - userinfo.email: User's email address  
+  - userinfo.picture: URL to profile picture (optional)
+
+Route Context:
+- Accessed via /auth/dashboard
+- Requires authentication (enforced by @requires_auth decorator)
+- User redirected here after successful Auth0 login
+
+Security Features:
+- Profile picture URLs are validated during auth process
+- User data comes from trusted Auth0 source
+- Session-based authentication ensures data integrity
+
+Future Enhancements:
+- Financial data visualization
+- Expense tracking forms
+- Budget management tools
+- Transaction history
+-->
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Main dashboard container with Bootstrap styling -->
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left column: User profile card -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Profile</h5>
+                    
+                    <!-- Conditional profile picture display -->
+                    {% if userinfo.picture %}
+                        <!-- 
+                        Profile picture from Auth0
+                        - Alt text includes user name for accessibility
+                        - Bootstrap classes for styling (rounded-circle, mb-3)
+                        - max-width prevents oversized images
+                        -->
+                        <img src="{{ userinfo.picture }}" 
+                             alt="User profile picture for {{ userinfo.name }}" 
+                             class="rounded-circle mb-3" 
+                             style="max-width: 100px;">
+                    {% endif %}
+                    
+                    <!-- User profile information -->
+                    <p><strong>Name:</strong> {{ userinfo.name }}</p>
+                    <p><strong>Email:</strong> {{ userinfo.email }}</p>
+                    
+                    <!-- Logout button with warning styling -->
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right column: Main dashboard content -->
+        <div class="col-md-8">
+            <h2>Financial Dashboard</h2>
+            <p>Welcome to your personal finance dashboard!</p>
+            
+            <!-- 
+            Future feature areas:
+            - Expense tracking forms
+            - Budget visualization
+            - Transaction history
+            - Financial goals tracking
+            -->
+        </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

@@ -1,15 +1,46 @@
+<!--
+Personal Finance Coach - Home Page Template
+
+This template displays the landing page with different content based on user authentication.
+
+Template Variables (passed from route handler):
+- user_authenticated: Boolean indicating if user is logged in
+- username: String containing user's display name (if authenticated)
+
+Template Logic:
+- If user is authenticated: Shows welcome message and dashboard/logout buttons
+- If user is not authenticated: Shows welcome message and login button
+
+Extends: base.html (inherits navigation, Bootstrap styling, flash messages)
+-->
+
 {% extends "base.html" %}
 
+<!-- Override the page title -->
+{% block title %}Home - Personal Finance Coach{% endblock %}
+
 {% block content %}
+<!-- Hero section with centered content -->
 <div class="text-center hero">
+  <!-- Conditional content based on authentication status -->
   {% if user_authenticated %}
+    <!-- Authenticated user view -->
+    <!-- Display personalized welcome message with user's name -->
     <h1 class="mb-4">Welcome {{ username }}!</h1>
     <p class="lead">You are logged in!</p>
+    
+    <!-- Navigation buttons for authenticated users -->
+    <!-- Primary button to access main functionality -->
     <a href="{{ url_for('auth.dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+    <!-- Secondary button for logout with warning color -->
     <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger ms-2">Logout</a>
   {% else %}
+    <!-- Non-authenticated user view -->
+    <!-- Generic welcome message for new visitors -->
     <h1 class="mb-4">Welcome to Personal Finance Coach</h1>
     <p class="lead">Login to manage your finances</p>
+    
+    <!-- Call-to-action button to start authentication process -->
     <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login</a>
   {% endif %}
 </div>

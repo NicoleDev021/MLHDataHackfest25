@@ -1,15 +1,52 @@
-{% extends "base.html" %}                                                                                         
-                                                                                                                      
-    {% block title %}Login{% endblock %}                                                                              
-                                                                                                                      
-    {% block content %}                                                                                               
-    <div class="row justify-content-center">                                                                          
-        <div class="col-md-6 text-center">                                                                            
-            <h1 class="mb-4">Welcome to Personal Finance Coach</h1>                                                   
-            <p class="mb-4">Please log in to access your financial dashboard</p>                                      
-            <a href="{{ url_for('auth.login', domain=AUTH0_DOMAIN, client_id=AUTH0_CLIENT_ID, redirect_uri=AUTH0_REDIRECT_URI) }}" class="btn btn-primary">                                            
-                Login with Auth0                                                                                      
-            </a>                                                                                                      
-        </div>                                                                                                        
-    </div>                                                                                                            
-    {% endblock %}     
+<!--
+Personal Finance Coach - Login Page Template
+
+This template provides the login interface for users to authenticate via Auth0.
+
+Template Purpose:
+- Clean, centered login interface
+- Clear call-to-action for authentication
+- Integrates with Auth0 OAuth2 flow
+
+Route Context:
+- Typically accessed when user is not authenticated
+- Can be accessed directly via /auth/login
+- Redirects to Auth0 for actual authentication
+
+Template Variables:
+- No specific variables needed (uses Flask's url_for)
+
+User Flow:
+1. User sees login page with explanation
+2. User clicks "Login with Auth0" button
+3. Browser redirects to Auth0 authentication
+4. After Auth0 login, user returns to /auth/callback
+5. Successful auth redirects to dashboard
+-->
+
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<!-- Centered login form using Bootstrap grid -->
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <!-- Clear heading explaining the application -->
+        <h1 class="mb-4">Welcome to Personal Finance Coach</h1>
+        
+        <!-- Brief explanation of what user needs to do -->
+        <p class="mb-4">Please log in to access your financial dashboard</p>
+        
+        <!-- 
+        Primary call-to-action button
+        - url_for('auth.login') generates /auth/login URL
+        - This triggers the OAuth2 flow in routes.py
+        - Bootstrap btn-primary provides prominent styling
+        -->
+        <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+            Login with Auth0
+        </a>
+    </div>
+</div>
+{% endblock %}     

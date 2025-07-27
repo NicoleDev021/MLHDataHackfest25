@@ -1,0 +1,31 @@
+[MASTER]
+# Ignore import errors for known installed packages
+ignored-modules=flask,dotenv,authlib,marshmallow
+
+[MESSAGES CONTROL]
+# Disable specific warnings that are not applicable to our codebase
+disable=
+    import-error,  # Ignore import errors for known packages
+    missing-module-docstring,  # We have comprehensive module docstrings
+    missing-class-docstring,   # We have comprehensive class docstrings
+    missing-function-docstring # We have comprehensive function docstrings
+
+[FORMAT]
+# Maximum number of characters on a single line
+max-line-length=88
+
+[BASIC]
+# Good variable names which should always be accepted
+good-names=i,j,k,ex,Run,_,app,bp,db,id
+
+[DESIGN]
+# Maximum number of arguments for function / method
+max-args=10
+# Maximum number of locals for function / method body
+max-locals=15
+# Maximum number of return / yield for function / method body
+max-returns=6
+# Maximum number of branch for function / method body
+max-branches=12
+# Maximum number of statements in function / method body
+max-statements=50

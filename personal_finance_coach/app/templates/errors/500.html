@@ -1,15 +1,69 @@
+<!--
+Personal Finance Coach - 500 Server Error Page Template
+
+This template displays when the application encounters an internal server error.
+
+Error Context:
+- Triggered by unhandled exceptions in Python code
+- HTTP status code 500 (Internal Server Error)
+- Indicates a problem with the application, not user input
+
+Common Causes:
+- Database connection failures
+- Missing environment variables
+- Auth0 service unavailable
+- Code bugs (TypeError, AttributeError, etc.)
+- Configuration errors
+
+Template Purpose:
+- Hide technical error details from users (security)
+- Provide professional error acknowledgment
+- Offer path to continue using the application
+- Maintain user confidence in the service
+
+Error Logging:
+- Actual error details logged to logs/error.log
+- Error logged in app/__init__.py register_error_handlers()
+- Developers can debug using log files
+
+User Experience:
+- Takes responsibility ("our end" not "your fault")
+- Clear that it's a temporary issue
+- Provides immediate action to continue
+-->
+
 {% extends "base.html" %}
 
 {% block title %}Server Error{% endblock %}
 
 {% block content %}
+    <!-- Professional server error page -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
+                <!-- Clear error code identification -->
                 <h1 class="display-1">500</h1>
+                
+                <!-- Professional error title -->
                 <h2>Internal Server Error</h2>
+                
+                <!-- 
+                User-friendly explanation that:
+                - Takes responsibility (not user's fault)
+                - Doesn't reveal technical details (security)
+                - Suggests it's temporary
+                -->
                 <p class="lead">Something went wrong on our end.</p>
+                
+                <!-- Visual separator -->
                 <hr class="my-4">
+                
+                <!-- 
+                Recovery action for user
+                - Brings them back to working part of application
+                - url_for('home') ensures safe, valid URL
+                - Bootstrap styling for professional appearance
+                -->
                 <a href="{{ url_for('home') }}" class="btn btn-primary">
                     <i class="fas fa-home"></i> Go Home
                 </a>

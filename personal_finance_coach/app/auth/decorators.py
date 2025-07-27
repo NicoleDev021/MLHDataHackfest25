@@ -18,7 +18,7 @@ def requires_auth(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "profile" not in session:
-            logger.debug(f"Unauthorized access attempt to {f.__name__}")
+            logger.debug("Unauthorized access attempt to %s", f.__name__)
             flash("Please log in to access this page.", "info")
             return redirect(url_for("auth.login"))
         return f(*args, **kwargs)
@@ -38,14 +38,14 @@ def requires_role(role):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if "profile" not in session:
-                logger.debug(f"Unauthorized access attempt to {f.__name__}")
+                logger.debug("Unauthorized access attempt to %s", f.__name__)
                 flash("Please log in to access this page.", "info")
                 return redirect(url_for("auth.login"))
 
             user_roles = session.get("profile", {}).get("roles", [])
             if role not in user_roles:
                 logger.warning(
-                    f"Insufficient permissions for {f.__name__}: required {role}"
+                    "Insufficient permissions for %s: required %s", f.__name__, role
                 )
                 flash("You don't have permission to access this page.", "error")
                 return redirect(url_for("home"))

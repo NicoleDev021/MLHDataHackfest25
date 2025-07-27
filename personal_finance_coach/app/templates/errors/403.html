@@ -1,15 +1,74 @@
+<!--
+Personal Finance Coach - 403 Forbidden Access Page Template
+
+This template displays when a user tries to access a resource they don't have permission for.
+
+Error Context:
+- Triggered by authorization failures (not authentication)
+- HTTP status code 403 (Forbidden)
+- User is authenticated but lacks required permissions
+
+Common Scenarios:
+- Accessing admin-only routes without admin role
+- Trying to view another user's private data
+- Missing required permissions for specific features
+- Role-based access control violations
+
+Template Purpose:
+- Clearly explain access is denied
+- Differentiate from authentication (login) issues
+- Provide path back to accessible content
+- Maintain professional security messaging
+
+Security Considerations:
+- Doesn't reveal what the protected resource contains
+- Doesn't hint at what permissions would be needed
+- Professional messaging maintains application security
+- Logged for security monitoring
+
+Authentication vs Authorization:
+- 401: User not logged in (authentication failure)
+- 403: User logged in but lacks permission (authorization failure)
+
+Usage in Application:
+- Can be triggered by @requires_role decorator
+- May be used for future admin features
+- Protects sensitive financial data access
+-->
+
 {% extends "base.html" %}
 
 {% block title %}Access Forbidden{% endblock %}
 
 {% block content %}
+    <!-- Professional access denied page -->
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
+                <!-- Clear forbidden error code -->
                 <h1 class="display-1">403</h1>
+                
+                <!-- Security-appropriate title -->
                 <h2>Access Forbidden</h2>
+                
+                <!-- 
+                Clear but secure explanation:
+                - Confirms user identity is known (authenticated)
+                - Explains permission issue (not login issue)
+                - Professional security messaging
+                - Doesn't reveal protected resource details
+                -->
                 <p class="lead">You don't have permission to access this resource.</p>
+                
+                <!-- Visual separator -->
                 <hr class="my-4">
+                
+                <!-- 
+                Safe navigation option
+                - Returns to publicly accessible home page
+                - Gives user immediate path forward
+                - Professional appearance with Bootstrap styling
+                -->
                 <a href="{{ url_for('home') }}" class="btn btn-primary">
                     <i class="fas fa-home"></i> Go Home
                 </a>
