@@ -15,10 +15,10 @@ class Config:
     # Set URLs based on environment
     CODESPACE_NAME = os.getenv("CODESPACE_NAME")
     if CODESPACE_NAME:
-        AUTH0_CALLBACK_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev/auth/callback"
-        AUTH0_BASE_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev"
-        AUTH0_LOGIN_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev/auth/login"
+        BASE_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev"
+        AUTH0_CALLBACK_URL = f"{BASE_URL}/auth/callback"
+        AUTH0_BASE_URL = BASE_URL
     else:
-        AUTH0_CALLBACK_URL = "http://localhost:5000/auth/callback"
-        AUTH0_BASE_URL = "http://localhost:5000"
-        AUTH0_LOGIN_URL = "http://localhost:5000/auth/login"
+        BASE_URL = "http://localhost:5000"
+        AUTH0_CALLBACK_URL = f"{BASE_URL}/auth/callback"
+        AUTH0_BASE_URL = BASE_URL

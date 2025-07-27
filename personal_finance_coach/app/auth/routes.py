@@ -21,14 +21,20 @@ def callback():
         token = oauth.auth0.authorize_access_token()
         session['user'] = token
         userinfo = token.get('userinfo')
+        if not userinfo:
+            logger.error("No userinfo in token")
+            return redirect(url_for('auth.login'))
+            
         session['profile'] = {
             'name': userinfo.get('name'),
             'email': userinfo.get('email'),
             'picture': userinfo.get('picture')
         }
         logger.debug(f"User authenticated: {session['profile'].get('email')}")
-        # Update redirect to use Flask's url_for for dynamic routing
-        return redirect(url_for('auth.dashboard'))
+        
+        # Use base URL from config
+        base_url = app.config['BASE_URL']
+        return redirect(f"{base_url}/auth/dashboard")
     except Exception as e:
         logger.error(f"Callback error: {str(e)}")
         return redirect(url_for('auth.login'))
@@ -36,10 +42,10 @@ def callback():
 @bp.route('/dashboard')
 def dashboard():
     if not session.get('profile'):
+        logger.debug("No profile in session, redirecting to login")
         return redirect(url_for('auth.login'))
         
     profile = session.get('profile', {})
-    # Filter the user profile to include only necessary fields
     userinfo = {
         'name': profile.get('name'),
         'email': profile.get('email'),
@@ -48,7 +54,7 @@ def dashboard():
     
     logger.debug(f"Loading dashboard for user: {userinfo.get('email')}")
     return render_template(
-        'auth/dashboard.html',
+        'auth/dashboard.html',  # Make sure this path matches your template location
         userinfo=userinfo,
         pretty=json.dumps(userinfo, indent=4)
     )
