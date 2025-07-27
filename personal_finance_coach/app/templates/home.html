@@ -5,7 +5,7 @@
   {% if session %}
     <h1 class="mb-4">Welcome {{ session.userinfo.name }}!</h1>
     <p class="lead">You are logged in!</p>
-    <pre>{{ pretty }}</pre>
+    <pre>{{ pretty | tojson }}</pre>
     <a href="/logout" class="btn btn-primary">Logout</a>
   {% else %}
     <h1 class="mb-4">Welcome to Personal Finance Coach</h1>
