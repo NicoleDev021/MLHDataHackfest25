@@ -27,9 +27,8 @@ def callback():
             'picture': userinfo.get('picture')
         }
         logger.debug(f"User authenticated: {session['profile'].get('email')}")
-        # Update redirect to use base URL
-        base_url = app.config['AUTH0_BASE_URL']
-        return redirect(f"{base_url}/auth/dashboard")
+        # Update redirect to use Flask's url_for for dynamic routing
+        return redirect(url_for('auth.dashboard'))
     except Exception as e:
         logger.error(f"Callback error: {str(e)}")
         return redirect(url_for('auth.login'))
