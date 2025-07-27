@@ -7,4 +7,4 @@ def requires_auth(f):
         if 'user' not in session:
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
-    return decorated
+    return decorated_function
