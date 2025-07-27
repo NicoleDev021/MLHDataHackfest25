@@ -1,5 +1,6 @@
 from flask import Blueprint
 
-bp = Blueprint('auth', __name__)
+bp = Blueprint("auth", __name__)
 
-from app.auth import routes  # Import routes after blueprint creation
+# Import routes after blueprint creation to avoid circular imports
+from app.auth import routes  # noqa: E402
