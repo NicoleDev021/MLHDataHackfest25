@@ -1,21 +1,14 @@
-from flask import Blueprint, redirect, url_for, session
-from app.auth.decorators import requires_auth
-from app import oauth
-import logging
-
-logger = logging.getLogger(__name__)
-bp = Blueprint('auth', __name__)
+from flask import current_app as app
+from flask import redirect, render_template, session, url_for
+from app.auth import bp
+from app.auth.decorators import login_required
+from urllib.parse import urlencode
 
 @bp.route('/login')
 def login():
-    logger.debug("Login route called")
-    try:
-        return oauth.auth0.authorize_redirect(
-            redirect_uri=url_for('auth.callback', _external=True)
-        )
-    except Exception as e:
-        logger.error(f"Login error: {str(e)}")
-        return f"Login error: {str(e)}", 500
+    return oauth.auth0.authorize_redirect(
+        redirect_uri=app.config['AUTH0_CALLBACK_URL']
+    )
 
 @bp.route('/callback')
 def callback():
@@ -31,4 +24,14 @@ def callback():
 @bp.route('/dashboard')
 @requires_auth
 def dashboard():
-    return "Dashboard"
+    return render_template('auth/dashboard.html',
+                         userinfo=session['profile'])
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    params = {
+        'returnTo': url_for('auth.login', _external=True),
+        'client_id': app.config['AUTH0_CLIENT_ID']
+    }
+    return redirect(oauth.auth0.api_base_url + '/v2/logout?' + urlencode(params))

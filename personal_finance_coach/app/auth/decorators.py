@@ -3,8 +3,8 @@ from flask import session, redirect, url_for
 
 def requires_auth(f):
     @wraps(f)
-    def decorated(*args, **kwargs):
-        if 'profile' not in session:
+    def decorated_function(*args, **kwargs):
+        if 'jwt_payload' not in session:
             return redirect(url_for('auth.login'))
         return f(*args, **kwargs)
     return decorated
