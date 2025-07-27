@@ -11,18 +11,25 @@ class Config:
         if FLASK_ENV == "development":
             SECRET_KEY = "dev-secret-key"  # Fallback key for development only
         else:
-            raise RuntimeError("APP_SECRET_KEY environment variable is not set. The application cannot start without it.")
+            raise RuntimeError("APP_SECRET_KEY environment variable is not set.")
+            
     AUTH0_CLIENT_ID = os.getenv("AUTH0_CLIENT_ID")
     AUTH0_CLIENT_SECRET = os.getenv("AUTH0_CLIENT_SECRET")
     AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
     
     # Set URLs based on environment
     CODESPACE_NAME = os.getenv("CODESPACE_NAME")
+    CODESPACE_PORT = "5000"  # Explicitly set port for Codespace
+    
     if CODESPACE_NAME:
-        BASE_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev"
+        # Force HTTPS and port 5000 for Codespace
+        BASE_URL = f"https://{CODESPACE_NAME}-{CODESPACE_PORT}.app.github.dev"
         AUTH0_CALLBACK_URL = f"{BASE_URL}/auth/callback"
-        AUTH0_BASE_URL = BASE_URL
+        # Add explicit port-specific redirect URL
+        AUTH0_REDIRECT_URL = BASE_URL
     else:
         BASE_URL = "http://localhost:5000"
         AUTH0_CALLBACK_URL = f"{BASE_URL}/auth/callback"
-        AUTH0_BASE_URL = BASE_URL
+        AUTH0_REDIRECT_URL = BASE_URL
+
+    AUTH0_BASE_URL = BASE_URL

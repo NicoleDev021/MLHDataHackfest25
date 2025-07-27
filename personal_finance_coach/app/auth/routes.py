@@ -19,21 +19,24 @@ def callback():
     logger.debug("Callback route called")
     try:
         token = oauth.auth0.authorize_access_token()
-        session['user'] = token
         userinfo = token.get('userinfo')
         if not userinfo:
             logger.error("No userinfo in token")
             return redirect(url_for('auth.login'))
-            
+
+        session['user'] = token
         session['profile'] = {
             'name': userinfo.get('name'),
             'email': userinfo.get('email'),
             'picture': userinfo.get('picture')
         }
+        
         logger.debug(f"User authenticated: {session['profile'].get('email')}")
         
-        # Use base URL from config
-        return redirect(url_for('auth.dashboard'))
+        # Use explicit port URL for redirect
+        redirect_url = f"{app.config['AUTH0_REDIRECT_URL']}/auth/dashboard"
+        logger.debug(f"Redirecting to: {redirect_url}")
+        return redirect(redirect_url)
     except Exception as e:
         logger.error(f"Callback error: {str(e)}")
         return redirect(url_for('auth.login'))
