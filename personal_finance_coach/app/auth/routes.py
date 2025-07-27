@@ -7,7 +7,7 @@ from urllib.parse import urlencode
 @bp.route('/login')
 def login():
     return oauth.auth0.authorize_redirect(
-        redirect_uri=app.config.get('AUTH0_CALLBACK_URL', 'http://localhost:5000/callback')
+        redirect_uri=app.config.get('AUTH0_CALLBACK_URL', url_for('auth.callback', _external=True))
     )
 
 @bp.route('/callback')
