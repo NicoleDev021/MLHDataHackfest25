@@ -1,0 +1,26 @@
+{% extends "base.html" %}                                                                                         
+                                                                                                                      
+    {% block title %}Dashboard{% endblock %}                                                                          
+                                                                                                                      
+    {% block content %}                                                                                               
+    <div class="row">                                                                                                 
+        <div class="col-md-4">                                                                                        
+            <div class="card">                                                                                        
+                <div class="card-body">                                                                               
+                    <h5 class="card-title">Profile</h5>                                                               
+                    {% if 'profile' in session %}                                                                     
+                        <img src="{{ session.profile.picture }}" alt="Profile" class="rounded-circle mb-3"            
+  width="100">                                                                                                        
+                        <p><strong>Name:</strong> {{ session.profile.name }}</p>                                      
+                        <p><strong>Email:</strong> {{ session.profile.email }}</p>                                    
+                    {% endif %}                                                                                       
+                </div>                                                                                                
+            </div>                                                                                                    
+        </div>                                                                                                        
+        <div class="col-md-8">                                                                                        
+            <h2>Financial Dashboard</h2>                                                                              
+            <p>Welcome to your personal finance dashboard!</p>                                                        
+            <!-- Add more dashboard components here -->                                                               
+        </div>                                                                                                        
+    </div>                                                                                                            
+    {% endblock %}      
