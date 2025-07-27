@@ -3,25 +3,25 @@
     {% block title %}Dashboard{% endblock %}                                                                          
                                                                                                                       
     {% block content %}                                                                                               
-    <div class="container">                                                                                            
-        <h1>Dashboard</h1>                                                                                            
+    <div class="container mt-4">                                                                                            
         <div class="row">                                                                                                 
             <div class="col-md-4">                                                                                        
                 <div class="card">                                                                                        
                     <div class="card-body">                                                                               
                         <h5 class="card-title">Profile</h5>                                                               
-                        {% if session %}                                                                                 
-                            <img src="{{ session.userinfo.picture }}" alt="Profile" class="rounded-circle mb-3"            
-      width="100">                                                                                                        
-                            <p><strong>Name:</strong> {{ session.userinfo.name }}</p>                                      
-                            <p><strong>Email:</strong> {{ session.userinfo.email }}</p>                                    
-                        {% endif %}                                                                                       
+                        {% if userinfo.picture %}                                                                                 
+                            <img src="{{ userinfo.picture }}" alt="Profile" class="rounded-circle mb-3"            
+      style="max-width: 100px;">                                                                                                 
+                        {% endif %}                                                                                                 
+                        <p><strong>Name:</strong> {{ userinfo.name }}</p>                                      
+                        <p><strong>Email:</strong> {{ userinfo.email }}</p>                                    
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">Logout</a>
                     </div>                                                                                                
                 </div>                                                                                                    
             </div>                                                                                                        
             <div class="col-md-8">                                                                                        
-                <h2>Financial Overview</h2>                                                                              
-                <p>Welcome to your financial dashboard!</p>                                                        
+                <h2>Financial Dashboard</h2>                                                                              
+                <p>Welcome to your personal finance dashboard!</p>                                                                      
             </div>                                                                                                        
         </div>                                                                                                            
     </div>

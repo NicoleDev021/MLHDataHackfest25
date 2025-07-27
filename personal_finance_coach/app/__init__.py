@@ -39,7 +39,17 @@ def create_app(config_class=Config):
         },
     )
 
-    # Register the auth blueprint
-    from app.auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
+    # Add root route
+    @app.route("/")
+    def home():
+        return render_template(
+            "home.html",
+            session=session.get("user"),
+            pretty=json.dumps(session.get("user"), indent=4),
+        )
+
+    # Register the auth blueprint with correct import
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+
     return app

@@ -12,9 +12,13 @@ class Config:
     AUTH0_CLIENT_SECRET = os.getenv("AUTH0_CLIENT_SECRET")
     AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
     
-    # Determine the callback URL based on environment
+    # Set URLs based on environment
     CODESPACE_NAME = os.getenv("CODESPACE_NAME")
     if CODESPACE_NAME:
-        AUTH0_CALLBACK_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev/callback"
+        AUTH0_CALLBACK_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev/auth/callback"
+        AUTH0_BASE_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev"
+        AUTH0_LOGIN_URL = f"https://{CODESPACE_NAME}-5000.app.github.dev/auth/login"
     else:
-        AUTH0_CALLBACK_URL = "http://localhost:5000/callback"
+        AUTH0_CALLBACK_URL = "http://localhost:5000/auth/callback"
+        AUTH0_BASE_URL = "http://localhost:5000"
+        AUTH0_LOGIN_URL = "http://localhost:5000/auth/login"

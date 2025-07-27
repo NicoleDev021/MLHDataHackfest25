@@ -1,18 +1,15 @@
-from flask import current_app as app
-from flask import redirect, render_template, session, url_for
+from flask import current_app as app, redirect, render_template, session, url_for
 from app.auth import bp
 from app import oauth
-from app.auth.decorators import requires_auth  # Updated import
-from urllib.parse import urlencode
 import logging
-import json  # Import json module
+import json
+from urllib.parse import urlencode, quote_plus
 
-# Set up logger
 logger = logging.getLogger(__name__)
 
 @bp.route('/login')
 def login():
-    logger.debug(f"Using callback URL: {app.config['AUTH0_CALLBACK_URL']}")
+    logger.debug("Login route called")
     return oauth.auth0.authorize_redirect(
         redirect_uri=app.config['AUTH0_CALLBACK_URL']
     )
@@ -23,28 +20,56 @@ def callback():
     try:
         token = oauth.auth0.authorize_access_token()
         session['user'] = token
-        # Store userinfo from token in session
-        session['profile'] = token.get('userinfo')
-        logger.debug(f"User profile stored: {session['profile']}")
-        return redirect(url_for('auth.dashboard'))
+        userinfo = token.get('userinfo')
+        session['profile'] = {
+            'name': userinfo.get('name'),
+            'email': userinfo.get('email'),
+            'picture': userinfo.get('picture')
+        }
+        logger.debug(f"User authenticated: {session['profile'].get('email')}")
+        # Update redirect to use base URL
+        base_url = app.config['AUTH0_BASE_URL']
+        return redirect(f"{base_url}/auth/dashboard")
     except Exception as e:
         logger.error(f"Callback error: {str(e)}")
-        return f"Callback error: {str(e)}", 500
+        return redirect(url_for('auth.login'))
 
 @bp.route('/dashboard')
-@requires_auth
 def dashboard():
+    if not session.get('profile'):
+        return redirect(url_for('auth.login'))
+        
+    profile = session.get('profile', {})
+    # Filter the user profile to include only necessary fields
+    userinfo = {
+        'name': profile.get('name'),
+        'email': profile.get('email'),
+        'picture': profile.get('picture')
+    }
+    
+    logger.debug(f"Loading dashboard for user: {userinfo.get('email')}")
     return render_template(
         'auth/dashboard.html',
-        userinfo=session.get('profile'),
-        pretty=json.dumps(session.get('profile', {}), indent=4)
+        userinfo=userinfo,
+        pretty=json.dumps(userinfo, indent=4)
     )
 
 @bp.route('/logout')
 def logout():
     session.clear()
-    params = {
-        'returnTo': url_for('auth.login', _external=True),
-        'client_id': app.config['AUTH0_CLIENT_ID']
-    }
-    return redirect(oauth.auth0.api_base_url + '/v2/logout?' + urlencode(params))
+    base_url = app.config['AUTH0_BASE_URL']
+    
+    logger.debug(f"Logging out. Redirect URL: {base_url}")
+    
+    return redirect(
+        "https://"
+        + app.config["AUTH0_DOMAIN"]
+        + "/v2/logout?"
+        + urlencode(
+            {
+                "returnTo": base_url,
+                "client_id": app.config["AUTH0_CLIENT_ID"],
+            },
+            quote_via=quote_plus,
+        )
+    )
