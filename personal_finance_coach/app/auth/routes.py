@@ -61,7 +61,7 @@ def dashboard():
 @bp.route('/logout')
 def logout():
     session.clear()
-    base_url = app.config['AUTH0_BASE_URL']
+    base_url = app.config['BASE_URL']
     
     logger.debug(f"Logging out. Redirect URL: {base_url}")
     
