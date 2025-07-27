@@ -4,10 +4,14 @@ from app.config import Config
 import json
 from urllib.parse import quote_plus, urlencode
 import os
+from dotenv import load_dotenv, find_dotenv
 
 oauth = OAuth()
 
 def create_app(config_class=Config):
+    # Load environment variables from .env file
+    load_dotenv(find_dotenv())
+
     app = Flask(__name__)
     app.config.from_object(config_class)
     app.secret_key = app.config["SECRET_KEY"]
@@ -31,6 +35,7 @@ def create_app(config_class=Config):
         client_kwargs={
             "scope": "openid profile email",
             "response_type": "code",
+            "token_endpoint_auth_method": "client_secret_post"
         },
     )
 
