@@ -4,12 +4,64 @@ SPDX-FileCopyrightText: Copyright (c) 2025 Madison Nicole Goodwin https://github
 SPDX-License-Identifier: CC-BY-4.0
 -->
 
-# Template Repository for Correct License Compliance of CC and GPL
+# Personal Finance Coach
 
-> **Disclaimer:**  
-> I am not a lawyer. The information provided in this repository is based on my own personal research and is intended for my own use. Please consult a qualified attorney for legal advice or guidance regarding license compliance.
+A Flask application that helps users manage their personal finances with Auth0 authentication.
 
-This repository serves as a template for correctly complying with Creative Commons (CC) and GNU General Public License (GPL) requirements.
+## Environment Setup
+
+### Auth0 Configuration
+
+1. Create an Auth0 account at [auth0.com](https://auth0.com)
+2. Create a new Application:
+   - Go to Applications > Applications
+   - Click "Create Application"
+   - Name it "Personal Finance Coach"
+   - Choose "Regular Web Application"
+
+3. Configure Application URLs:
+   ```
+   Allowed Callback URLs:
+   http://localhost:5000/callback
+   https://${CODESPACE_NAME}-5000.app.github.dev/callback
+
+   Allowed Logout URLs:
+   http://localhost:5000
+   https://${CODESPACE_NAME}-5000.app.github.dev
+
+   Allowed Web Origins:
+   http://localhost:5000
+   https://${CODESPACE_NAME}-5000.app.github.dev
+   ```
+
+### Environment Variables
+
+Create a `.env` file in the project root with the following variables:
+
+```properties
+# Auth0 Configuration
+AUTH0_CLIENT_ID='your-client-id'
+AUTH0_CLIENT_SECRET='your-client-secret'
+AUTH0_DOMAIN='your-domain.us.auth0.com'
+APP_SECRET_KEY='your-secret-key'
+
+# GitHub Codespace Configuration
+CODESPACE_NAME='your-codespace-name'  # Optional: Only needed for Codespace development
+```
+
+Replace the placeholder values:
+- `AUTH0_CLIENT_ID`: Found in Auth0 Application Settings
+- `AUTH0_CLIENT_SECRET`: Found in Auth0 Application Settings
+- `AUTH0_DOMAIN`: Your Auth0 domain (e.g., `dev-xxx.us.auth0.com`)
+- `APP_SECRET_KEY`: Generate with `python -c 'import secrets; print(secrets.token_hex())'`
+- `CODESPACE_NAME`: Your GitHub Codespace name (only if using Codespaces)
+
+### Running in GitHub Codespaces
+
+When running in GitHub Codespaces:
+1. The `CODESPACE_NAME` environment variable is automatically set
+2. Update your Auth0 Application URLs with your Codespace URL
+3. The application will be available at `https://${CODESPACE_NAME}-5000.app.github.dev`
 
 ---
 
