@@ -16,13 +16,7 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     app.secret_key = app.config["SECRET_KEY"]
     
-    # Update base URL function to use environment variable
-    def get_base_url():
-        codespace_name = os.getenv('CODESPACE_NAME')
-        if codespace_name:
-            return f"https://{codespace_name}-5000.app.github.dev"
-        return "http://localhost:5000"
-
+# Removed unused get_base_url() function
     oauth.init_app(app)
     oauth.register(
         "auth0",
