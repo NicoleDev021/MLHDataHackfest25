@@ -1,11 +1,18 @@
 from flask import current_app as app
 from flask import redirect, render_template, session, url_for
 from app.auth import bp
-from app.auth.decorators import login_required
+from app import oauth
+from app.auth.decorators import requires_auth  # Updated import
 from urllib.parse import urlencode
+import logging
+import json  # Import json module
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 @bp.route('/login')
 def login():
+    logger.debug(f"Using callback URL: {app.config['AUTH0_CALLBACK_URL']}")
     return oauth.auth0.authorize_redirect(
         redirect_uri=app.config['AUTH0_CALLBACK_URL']
     )
@@ -16,6 +23,9 @@ def callback():
     try:
         token = oauth.auth0.authorize_access_token()
         session['user'] = token
+        # Store userinfo from token in session
+        session['profile'] = token.get('userinfo')
+        logger.debug(f"User profile stored: {session['profile']}")
         return redirect(url_for('auth.dashboard'))
     except Exception as e:
         logger.error(f"Callback error: {str(e)}")
@@ -24,8 +34,11 @@ def callback():
 @bp.route('/dashboard')
 @requires_auth
 def dashboard():
-    return render_template('auth/dashboard.html',
-                         userinfo=session['profile'])
+    return render_template(
+        'auth/dashboard.html',
+        userinfo=session.get('profile'),
+        pretty=json.dumps(session.get('profile', {}), indent=4)
+    )
 
 @bp.route('/logout')
 def logout():
