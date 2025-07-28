@@ -98,9 +98,14 @@ jobs:
       uses: trufflesecurity/trufflehog@main
       with:
         path: ./
-        base: main
-        head: HEAD
         extra_args: --debug --only-verified
+      if: github.event_name == 'pull_request' || github.ref != 'refs/heads/main'
+    - name: Run TruffleHog full scan on main
+      uses: trufflesecurity/trufflehog@main
+      with:
+        path: ./
+        extra_args: --debug --only-verified
+      if: github.ref == 'refs/heads/main'
 
   dependency-review:
     name: Dependency Review
